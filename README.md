@@ -12,12 +12,12 @@ Check the database pods are up and running.
 ```
 kubectl get pods
 ```
-Check to see is the persistant volumes are up and running
+Check to see is the persistent volumes are up and running
 ```
 kubectl get pv
 ```
 
-Connect to the datablase server using a dedicated pod. Create a database to ensure that cockroach is running.
+Connect to the database server using a dedicated pod. Create a database to ensure that cockroach is running.
 
 Connect to the UI. Open and new terminal
 ```
@@ -34,7 +34,7 @@ kubectl run cockroachdb -it \
 --insecure \
 --host=my-release-cockroachdb-public
 ```
-Create a dadtabase
+Create a database
 ```
 CREATE DATABASE bank;
 ```
@@ -62,7 +62,7 @@ Quit
 
 ## Run a test workload
 
-First we need to grab the Cluster IP. As we are running in Kuberntes we can use this as our LB address.
+First we need to grab the Cluster IP. As we are running in Kubernetes we can use this as our LB address.
 ```
 kubectl get svc
 ```
@@ -103,7 +103,7 @@ cockroachdb/cockroachdb \
 --reuse-values
 ```
 
-Perfromace is hit, number of inserts dropped and latancy increased. Insert never get back to the previous level. Log commit latency also increased.
+Performance is hit, number of inserts dropped and latency increased. Insert never get back to the previous level. Log commit latency also increased.
 
 Gracefully remove nodes, Get a list of replicas.
 ```
@@ -134,16 +134,16 @@ cockroachdb/cockroachdb \
 --reuse-values
 ```
 
-Next forceilbly remove a replica....
+Next forcibly remove a replica....
 ```
 kubectl delete pod my-release-cockroachdb-2
 ```
-Admin console reporting suspect replica, kubernetes replaces pod with new replica attached the oroginal storage. Load test stops "server is not accepting clients".
+Admin console reporting suspect replica, kubernetes replaces pod with new replica attached the original storage. Load test stops "server is not accepting clients".
 ```
 kubectl get pod my-release-cockroachdb-2
 ```
 
-Remove all but 1 reolica.
+Remove all but 1 replica.
 ```
 kubectl scale statefulsets my-release-cockroachdb --replicas=1
 ```
@@ -154,25 +154,25 @@ Lost connection to the Database.
 
 1. As you were adding and removing nodes from the cluster, how did that impact
 performance? What kinds of metrics were you tracking to identify that impact?
-Answer - Numer of insters droped and SQL Service Latency Increased.
+Answer - Number of inserts dropped and SQL Service Latency Increased.
 
 2. What other kinds of behavior did you witness as you were changing the cluster
 topology? How did the system handle the hard node failure differently than the graceful
 shutdown?
-My load test stopped and had to be restrted when I forcibly removed nodes. Where as it carried on during graceful activities.
+My load test stopped and had to be restarted when I forcibly removed nodes. Where as it carried on during graceful activities.
 
 3. When you killed all of the nodes but one, what happened to the database?
 I lost connection to the database.
 
 4. Did the platform behave differently than you would expect in any of the above
 scenarios? If so please describe.
-I was suprised I lost connection even though I had one node remaining.
+I was surprised I lost connection even though I had one node remaining.
 
 Scale the StatefulSet back up to 3 replicas.
 ```
 kubectl scale statefulsets my-release-cockroachdb --replicas=3
 ```
-Next creater an application to connect to the database.
+Next create an application to connect to the database.
 Start the built-in SQL client:
 
 ```
