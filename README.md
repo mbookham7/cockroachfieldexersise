@@ -62,6 +62,18 @@ Quit
 
 ## Run a test workload
 
+First we need to grab the Cluster IP. As we are running in Kuberntes we can use this as our LB address.
+```
+kubectl get svc
+```
+Output
+```
+NAME                            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE
+kubernetes                      ClusterIP   10.96.0.1      <none>        443/TCP              3h50m
+my-release-cockroachdb          ClusterIP   None           <none>        26257/TCP,8080/TCP   3h49m
+my-release-cockroachdb-public   ClusterIP   10.97.92.150   <none>        26257/TCP,8080/TCP   3h49m
+```
+
 Exec into one of the db pods and run the following.
 ```
 kubectl exec my-release-cockroachdb-0 -it bash
@@ -70,14 +82,14 @@ kubectl exec my-release-cockroachdb-0 -it bash
 Prepare the pod to run the test
 ```
 cockroach workload init bank \
-'postgresql://root@localhost:26257?sslmode=disable'
+'postgresql://root@<clusterIP>:26257?sslmode=disable'
 ```
 
 Run a 60 minuite test
 ```
 cockroach workload run bank \
 --duration=60m \
-'postgresql://root@localhost:26257?sslmode=disable'
+'postgresql://root@<clusterIP>:26257?sslmode=disable'
 ```
 
 ## Start our scaling tests
