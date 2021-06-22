@@ -1,0 +1,17 @@
+# CockroachDB's Prometheus operator ServiceMonitor support
+# serviceMonitor:
+#  enabled: true
+#  labels: {name:cockroachdb}
+#  annotations: {}
+#  interval: 10s
+#    scrapeTimeout: 10s
+service:
+  public:
+    type: LoadBalancer
+    labels:
+      app.kubernetes.io/component: cockroachdb
+    annotations: {}
+storage:
+  persistentVolume:
+    enabled: true
+    size: 30Gi
