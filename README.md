@@ -4,7 +4,7 @@ Add the Helm repo and update
 helm repo add cockroachdb https://charts.cockroachdb.com/
 helm repo update
 ```
-Install the Helm chart with some overiding values.
+Install the Helm chart with some overriding values.
 ```
 helm install my-release --values my-values.yaml cockroachdb/cockroachdb
 ```
@@ -85,7 +85,7 @@ cockroach workload init bank \
 'postgresql://root@<clusterIP>:26257?sslmode=disable'
 ```
 
-Run a 60 minuite test
+Run a 60 minute test
 ```
 cockroach workload run bank \
 --duration=60m \
